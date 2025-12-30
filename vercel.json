@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "public/index.php",
+            "use": "@vercel/php"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(css|js|images|fonts|vendor|assets)/.*",
+            "dest": "/public/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "public/index.php"
+        }
+    ],
+    "env": {
+        "APP_ENV": "production",
+        "APP_DEBUG": "false",
+        "APP_URL": "https://alvaro-mobil.vercel.app"
+    },
+    "buildCommand": "npm run build && composer install --optimize-autoloader --no-dev"
+}
