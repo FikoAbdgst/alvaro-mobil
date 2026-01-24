@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('cars', function (Blueprint $table) {
@@ -19,16 +16,16 @@ return new class extends Migration
             $table->string('color');
             $table->decimal('price', 15, 2);
             $table->text('description')->nullable();
-            $table->longText('image')->nullable(); // Ubah ke longText untuk LONGBLOB (base64)
-            $table->string('image_mime_type')->nullable(); // Tambah kolom untuk mime type
+
+            // UBAH DISINI: Cukup string untuk menyimpan path (misal: cars/foto.jpg)
+            $table->string('image')->nullable();
+            // HAPUS kolom image_mime_type karena tidak diperlukan lagi untuk storage
+
             $table->boolean('is_available')->default(true);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('cars');

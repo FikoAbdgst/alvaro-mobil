@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Car extends Model
 {
@@ -16,8 +18,7 @@ class Car extends Model
         'color',
         'price',
         'description',
-        'image',
-        'image_mime_type', // Tambahkan ini
+        'image', // Ini sekarang menyimpan path, misal: 'cars/abc.jpg'
         'is_available',
     ];
 
@@ -27,14 +28,18 @@ class Car extends Model
         'is_available' => 'boolean',
     ];
 
-    /**
-     * Accessor untuk mendapatkan image sebagai base64 data URI
-     */
-    public function getImageDataUriAttribute()
+    // Relasi ke Gallery
+    public function images(): HasMany
     {
-        if ($this->image && $this->image_mime_type) {
-            return 'data:' . $this->image_mime_type . ';base64,' . $this->image;
+        return $this->hasMany(CarImage::class);
+    }
+
+    // Helper untuk mengambil URL gambar utama
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return Storage::url($this->image);
         }
-        return null;
+        return asset('images/default-car.png'); // Gambar default jika kosong
     }
 }
