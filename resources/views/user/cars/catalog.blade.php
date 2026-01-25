@@ -3,6 +3,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mb-6 lg:mb-8 text-center sm:text-left">
+                {{-- TAMBAHAN: Tombol Kembali ke Home --}}
+                <a href="{{ route('home') }}"
+                    class="inline-flex items-center gap-2 text-gray-500 hover:text-indigo-600 font-medium mb-4 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali ke Home
+                </a>
+                {{-- END TAMBAHAN --}}
+
                 <h1 class="text-2xl sm:text-4xl font-extrabold text-gray-900 mb-2">Katalog Penjualan Mobil</h1>
                 <p class="text-gray-600 text-sm sm:text-lg">Temukan mobil impian Anda dengan penawaran terbaik</p>
             </div>

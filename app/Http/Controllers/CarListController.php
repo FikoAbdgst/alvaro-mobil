@@ -9,14 +9,14 @@ use Illuminate\Http\Request;
 class CarListController extends Controller
 {
     /**
-     * Menampilkan landing page (Hanya 3 mobil terbaru).
+     * Menampilkan landing page (5 mobil untuk mobile, 3 untuk web).
      */
     public function index(): View
     {
-        // Ambil hanya 3 mobil terbaru yang tersedia
+        // Ambil 5 mobil terbaru yang tersedia (akan dibatasi di view)
         $cars = Car::where('is_available', true)
             ->latest()
-            ->take(3)
+            ->take(5)
             ->get();
 
         return view('user.cars.index', compact('cars'));

@@ -43,78 +43,79 @@
                 </a>
             </div>
         @else
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach ($cars as $car)
-                    <div class="group relative">
-                        <div
-                            class="absolute inset-0 bg-indigo-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500">
-                        </div>
+            <div class="relative">
+                {{-- Container: Mobile (Flex Horizontal) | Desktop (Grid) --}}
+                <div
+                    class="flex flex-nowrap overflow-x-auto gap-6 pb-6 px-4 -mx-4 snap-x snap-mandatory
+                md:grid md:grid-cols-3 md:gap-8 md:pb-0 md:px-0 md:mx-0 md:overflow-visible">
 
+                    @foreach ($cars as $index => $car)
+                        {{-- Mobile: Tampilkan 5 mobil | Desktop: Tampilkan 3 mobil --}}
                         <div
-                            class="relative bg-white rounded-3xl overflow-hidden border border-zinc-200 hover:border-indigo-200 hover:shadow-2xl transition-all duration-500">
-                            <div class="relative h-64 overflow-hidden bg-zinc-100">
+                            class="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-auto snap-center bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full
+                            {{ $index >= 3 ? 'md:hidden' : '' }}">
+
+                            {{-- Bagian Gambar --}}
+                            <div class="relative h-56 md:h-64 bg-gray-200 overflow-hidden">
                                 @if ($car->image)
                                     <img src="{{ Storage::url($car->image) }}"
                                         alt="{{ $car->brand }} {{ $car->model }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center">
-                                        <svg class="w-20 h-20 text-zinc-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                    {{-- Placeholder jika tidak ada gambar --}}
+                                    <div
+                                        class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
                                 @endif
 
-                                <div
-                                    class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                </div>
-
+                                {{-- Badge Status --}}
                                 <div class="absolute top-4 left-4">
                                     <span
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-xs font-bold rounded-full shadow-lg">
-                                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                                        class="px-3 py-1.5 bg-green-600/90 backdrop-blur-sm text-white text-sm font-bold rounded-lg shadow-md">
                                         Tersedia
                                     </span>
                                 </div>
-
-                                <div class="absolute top-4 right-4">
-                                    <span
-                                        class="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-zinc-900 text-xs font-bold rounded-full shadow-lg">
-                                        {{ $car->year }}
-                                    </span>
-                                </div>
                             </div>
 
-                            <div class="p-6 space-y-4">
-                                <div>
-                                    <h3
-                                        class="text-2xl font-bold text-zinc-900 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
-                                        {{ $car->brand }} {{ $car->model }}
-                                    </h3>
-                                    <p class="text-sm text-zinc-500">{{ $car->color }}</p>
+                            {{-- Bagian Konten --}}
+                            <div class="p-6 flex-1 flex flex-col">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <p class="text-sm font-bold text-indigo-600 mb-2 uppercase tracking-wider">
+                                            {{ $car->brand }}
+                                        </p>
+                                        <h3
+                                            class="text-xl md:text-2xl font-bold text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors line-clamp-2 mb-3">
+                                            {{ $car->model }}
+                                        </h3>
+
+                                    </div>
+                                    <div class="flex items-center ">
+                                        <span
+                                            class="text-base font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">{{ $car->year }}</span>
+                                    </div>
                                 </div>
 
-                                <div class="pt-2">
-                                    <p class="text-3xl font-black bg-zinc-700 bg-clip-text text-transparent">
-                                        {{ 'Rp ' . number_format($car->price, 0, ',', '.') }}
-                                    </p>
+                                <div class="mt-auto border-t border-gray-100 flex items-end justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 mb-1.5">Harga</p>
+                                        <div class="text-xl md:text-2xl font-bold text-gray-900">
+                                            Rp {{ number_format($car->price, 0, ',', '.') }}
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('cars.show', $car) }}"
+                                        class="inline-flex items-center justify-center py-3 px-6 rounded-xl bg-indigo-600 text-white text-base font-bold hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg">
+                                        Lihat
+                                    </a>
                                 </div>
-
-                                <a href="{{ route('cars.show', $car) }}"
-                                    class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 group/btn">
-                                    <span>Lihat Detail</span>
-                                    <svg class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </a>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
             <div class="mt-16 text-center">
