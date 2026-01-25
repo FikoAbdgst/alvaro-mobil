@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Gallery;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,9 @@ class CarListController extends Controller
             ->latest()
             ->take(5)
             ->get();
+        $galleries = Gallery::latest()->get();
 
-        return view('user.cars.index', compact('cars'));
+        return view('user.cars.index', compact('cars', 'galleries'));
     }
 
     /**

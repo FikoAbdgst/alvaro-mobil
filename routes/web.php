@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CarListController;
 use App\Http\Controllers\ProfileController;
@@ -25,7 +26,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('users', UserController::class)->except(['show']);
 
     Route::delete('/cars/images/{carImage}', [CarController::class, 'destroyImage'])->name('cars.images.destroy');
-    // NEW: Halaman Katalog (Search + Filter + Semua Mobil)
+    Route::resource('galleries', GalleryController::class)->except(['show', 'edit', 'update']);
 });
 
 // Profile hanya untuk admin yang login
