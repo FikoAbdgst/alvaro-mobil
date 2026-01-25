@@ -29,10 +29,7 @@
                         </div>
                         <div
                             class="relative w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center border border-white/10 ring-1 ring-white/5 shadow-2xl">
-                            <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
+                            <img src="{{ asset('images/logo.png') }}" alt="Hero Image" />
                         </div>
                     </div>
                     <span class="text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
@@ -127,9 +124,8 @@
     </div>
 @else
     {{-- ========================================== --}}
-    {{-- MODE GUEST: TOPBAR NAVIGATION (Original) --}}
+    {{-- MODE GUEST: TOPBAR NAVIGATION --}}
     {{-- ========================================== --}}
-    {{-- (Bagian Guest tetap sama seperti kode asli Anda, tidak perlu diubah) --}}
 
     <nav x-data="{ open: false, scrolled: false }" x-init="scrolled = (window.scrollY > 20)" @scroll.window="scrolled = (window.scrollY > 20)"
         :class="{
@@ -139,9 +135,9 @@
         }"
         class="fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ease-in-out">
 
-        {{-- ... Paste ulang kode navigasi guest Anda di sini ... --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-24">
+                {{-- Logo Section --}}
                 <div class="flex items-center gap-65">
                     <div class="flex items-center gap-4 group">
                         <div class="relative">
@@ -161,8 +157,10 @@
                     </div>
                 </div>
 
+                {{-- Desktop Button (DENGAN PESAN OTOMATIS) --}}
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="https://wa.me/6287875712617" target="_blank"
+                    <a href="https://wa.me/6287875712617?text=Halo%20Admin%20Alvaro%20Mobil,%20saya%20tertarik%20untuk%20bertanya%20mengenai%20sewa%20mobil."
+                        target="_blank"
                         class="group px-8 py-4 bg-green-600/20 backdrop-blur-md text-white font-bold rounded-xl border-2 border-green-400/50 hover:bg-green-600 hover:border-green-500 transition-all duration-300 flex items-center gap-2">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path
@@ -172,7 +170,7 @@
                     </a>
                 </div>
 
-                {{-- Mobile Hamburger (Guest) --}}
+                {{-- Mobile Hamburger --}}
                 <div class="flex items-center md:hidden">
                     <button @click="open = !open"
                         class="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
@@ -187,7 +185,7 @@
             </div>
         </div>
 
-        {{-- Mobile Menu Guest --}}
+        {{-- Mobile Menu --}}
         <div x-show="open" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
@@ -204,7 +202,9 @@
                     class="block px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-all">Kontak</a>
 
                 <div class="pt-4 mt-4 border-t border-white/10">
-                    <a href="https://wa.me/6287875712617" target="_blank"
+                    {{-- Mobile Button (DENGAN PESAN OTOMATIS) --}}
+                    <a href="https://wa.me/6287875712617?text=Halo%20Admin%20Alvaro%20Mobil,%20saya%20tertarik%20untuk%20bertanya%20mengenai%20mobil%20yang%20tersedia."
+                        target="_blank"
                         class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/20">
                         Chat WhatsApp
                     </a>

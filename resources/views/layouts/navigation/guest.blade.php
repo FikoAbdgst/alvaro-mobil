@@ -24,10 +24,10 @@
                     </a>
                 </div>
 
-                {{-- MODIFIKASI: Menampilkan tombol Hubungi Kami di semua tampilan (hapus 'hidden md:flex') --}}
-                {{-- Saya juga menyesuaikan padding (px-4 py-2 untuk mobile) agar muat di layar kecil --}}
+                {{-- MODIFIKASI: Tombol Hubungi Kami dengan LINK PESAN OTOMATIS --}}
                 <div class="flex items-center gap-6">
-                    <a href="https://wa.me/6287875712617" target="_blank"
+                    <a href="https://wa.me/6287875712617?text=Halo%20Admin%20Alvaro%20Mobil,%20saya%20tertarik%20untuk%20bertanya%20mengenai%20mobil%20yang%20tersedia."
+                        target="_blank"
                         class="group px-4 py-2 md:px-8 md:py-4 bg-green-600/20 backdrop-blur-md text-white font-bold rounded-xl border-2 border-green-400/50 hover:bg-green-600 hover:border-green-500 transition-all duration-300 flex items-center gap-2">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path
@@ -37,7 +37,7 @@
                     </a>
                 </div>
 
-                {{-- DIBUANG: Bagian Hamburger Menu & Mobile Menu Dropdown dihapus sesuai permintaan --}}
+                {{-- DIBUANG: Bagian Hamburger Menu & Mobile Menu Dropdown sudah dihapus sesuai kode yang Anda berikan --}}
             </div>
         </div>
     </nav>
