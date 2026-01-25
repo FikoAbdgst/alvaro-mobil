@@ -1,7 +1,6 @@
 {{-- Car Grid Section - Matching Navigation & Hero Theme --}}
-<div id="cars" class="py-24 bg-white">
+<div id="latest-collection" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
         <div class="text-center mb-16 space-y-4">
             <span class="inline-block px-4 py-1.5 bg-zinc-900 text-white text-sm font-bold rounded-full">
                 Koleksi Terbaru
@@ -19,7 +18,6 @@
         </div>
 
         @if ($cars->isEmpty())
-            <!-- Empty State -->
             <div class="max-w-md mx-auto text-center py-16">
                 <div class="relative w-24 h-24 mx-auto mb-6">
                     <div class="absolute inset-0 bg-indigo-500/20 rounded-full blur-xl">
@@ -45,19 +43,15 @@
                 </a>
             </div>
         @else
-            <!-- Cars Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($cars as $car)
                     <div class="group relative">
-                        <!-- Hover Glow Effect -->
                         <div
                             class="absolute inset-0 bg-indigo-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500">
                         </div>
 
-                        <!-- Card -->
                         <div
                             class="relative bg-white rounded-3xl overflow-hidden border border-zinc-200 hover:border-indigo-200 hover:shadow-2xl transition-all duration-500">
-                            <!-- Image Container -->
                             <div class="relative h-64 overflow-hidden bg-zinc-100">
                                 @if ($car->image)
                                     <img src="{{ Storage::url($car->image) }}"
@@ -77,7 +71,6 @@
                                     class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 </div>
 
-                                <!-- Status Badge -->
                                 <div class="absolute top-4 left-4">
                                     <span
                                         class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-xs font-bold rounded-full shadow-lg">
@@ -86,7 +79,6 @@
                                     </span>
                                 </div>
 
-                                <!-- Year Badge -->
                                 <div class="absolute top-4 right-4">
                                     <span
                                         class="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-zinc-900 text-xs font-bold rounded-full shadow-lg">
@@ -95,9 +87,7 @@
                                 </div>
                             </div>
 
-                            <!-- Content -->
                             <div class="p-6 space-y-4">
-                                <!-- Title -->
                                 <div>
                                     <h3
                                         class="text-2xl font-bold text-zinc-900 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
@@ -106,14 +96,12 @@
                                     <p class="text-sm text-zinc-500">{{ $car->color }}</p>
                                 </div>
 
-                                <!-- Price -->
                                 <div class="pt-2">
                                     <p class="text-3xl font-black bg-zinc-700 bg-clip-text text-transparent">
                                         {{ 'Rp ' . number_format($car->price, 0, ',', '.') }}
                                     </p>
                                 </div>
 
-                                <!-- CTA Button -->
                                 <a href="{{ route('cars.show', $car) }}"
                                     class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 group/btn">
                                     <span>Lihat Detail</span>
@@ -129,9 +117,15 @@
                 @endforeach
             </div>
 
-            <!-- Pagination -->
-            <div class="mt-16 flex justify-center">
-                {{ $cars->links() }}
+            <div class="mt-16 text-center">
+                <a href="{{ route('catalog') }}"
+                    class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl text-white bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    Lihat Semua Koleksi Mobil
+                    <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
             </div>
         @endif
     </div>

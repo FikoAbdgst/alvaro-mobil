@@ -12,6 +12,7 @@ Route::get('/', [CarListController::class, 'index'])->name('home');
 
 // Detail mobil dapat dilihat tanpa login
 Route::get('/cars/{car}', [CarListController::class, 'show'])->name('cars.show');
+Route::get('/catalog', [CarListController::class, 'catalog'])->name('catalog');
 
 // Route khusus admin (harus login dan role admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('users', UserController::class)->except(['show']);
 
     Route::delete('/cars/images/{carImage}', [CarController::class, 'destroyImage'])->name('cars.images.destroy');
+    // NEW: Halaman Katalog (Search + Filter + Semua Mobil)
 });
 
 // Profile hanya untuk admin yang login
