@@ -22,7 +22,7 @@
 
             {{-- 1. Logo Section --}}
             <div class="h-24 flex items-center justify-center border-b border-white/10 relative">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group px-6">
+                <div class="flex items-center gap-3 group px-6">
                     <div class="relative">
                         <div
                             class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-500">
@@ -38,7 +38,7 @@
                     <span class="text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
                         ALVARO ADMIN
                     </span>
-                </a>
+                </div>
 
                 {{-- Tombol Close di Mobile --}}
                 <button @click="sidebarOpen = false"
@@ -132,34 +132,33 @@
     {{-- (Bagian Guest tetap sama seperti kode asli Anda, tidak perlu diubah) --}}
 
     <nav x-data="{ open: false, scrolled: false }" x-init="scrolled = (window.scrollY > 20)" @scroll.window="scrolled = (window.scrollY > 20)"
-        :class="{ 'bg-zinc-900/90 backdrop-blur-xl border-white/10 shadow-lg': scrolled, 'bg-transparent border-transparent': !
-                scrolled }"
+        :class="{
+            'bg-zinc-900/90 backdrop-blur-xl border-white/10 shadow-lg': scrolled,
+            'bg-transparent border-transparent': !
+                scrolled
+        }"
         class="fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ease-in-out">
 
         {{-- ... Paste ulang kode navigasi guest Anda di sini ... --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-24">
                 <div class="flex items-center gap-65">
-                    <a href="{{ route('home') }}" class="flex items-center gap-4 group">
+                    <div class="flex items-center gap-4 group">
                         <div class="relative">
                             <div
                                 class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-500">
                             </div>
 
                             <div
-                                class="relative w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/10 ring-1 ring-white/5 shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                                <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
+                                class="relative w-12 h-12 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/10 ring-1 ring-white/5 shadow-2xl group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ asset('images/logo.png') }}" alt="Hero Image" />
                             </div>
                         </div>
                         <span
                             class="text-xl font-bold tracking-tight text-white hidden sm:block group-hover:text-indigo-300 transition-colors">
                             PT ALVARO MOBIL
                         </span>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="hidden md:flex items-center gap-6">

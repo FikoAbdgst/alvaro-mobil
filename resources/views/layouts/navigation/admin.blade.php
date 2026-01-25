@@ -20,7 +20,7 @@
 
             {{-- 1. Logo Section --}}
             <div class="h-24 flex items-center justify-center border-b border-white/10 relative">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group px-6">
+                <div class="flex items-center gap-3 group px-6">
                     <div class="relative">
                         <div
                             class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-500">
@@ -36,7 +36,7 @@
                     <span class="text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
                         ALVARO ADMIN
                     </span>
-                </a>
+                </div>
 
                 {{-- Tombol Close di Mobile --}}
                 <button @click="sidebarOpen = false"

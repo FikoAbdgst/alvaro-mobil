@@ -60,7 +60,10 @@
                                 @if ($car->image)
                                     <img src="{{ Storage::url($car->image) }}"
                                         alt="{{ $car->brand }} {{ $car->model }}"
-                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                        class="w-full h-full object-cover transition-transform duration-500 ">
+                                    <div
+                                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    </div>
                                 @else
                                     {{-- Placeholder jika tidak ada gambar --}}
                                     <div

@@ -39,8 +39,7 @@
             <h1
                 class="text-3xl sm:text-5xl md:text-7xl font-black mb-4 md:mb-6 leading-tight tracking-tight drop-shadow-lg px-2">
                 <span class="block text-white">Temukan</span>
-                <span
-                    class="block text-indigo-400 pb-2">
+                <span class="block text-indigo-400 pb-2">
                     Mobil Impian Anda
                 </span>
             </h1>
@@ -87,7 +86,7 @@
                 </a>
             </div>
 
-            {{-- Stats Grid: Margin top dikurangi di mobile --}}
+            {{-- Stats Grid: Margin top dikurangi di mobile
             <div class="mt-8 md:mt-16 grid grid-cols-3 gap-4 md:gap-8 w-full max-w-3xl mx-auto opacity-90">
                 <div class="text-center">
                     <div class="text-xl md:text-4xl font-black text-white mb-0.5 md:mb-1">500+</div>
@@ -101,7 +100,7 @@
                     <div class="text-xl md:text-4xl font-black text-white mb-0.5 md:mb-1">10+</div>
                     <div class="text-[10px] md:text-sm text-gray-300 uppercase tracking-widest">Tahun</div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </div>

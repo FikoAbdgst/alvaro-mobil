@@ -14,11 +14,7 @@
 
                             <div
                                 class="relative w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/10 ring-1 ring-white/5 shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                                <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
+                                <img src="{{ asset('images/logo.png') }}" alt="Hero Image" />
                             </div>
                         </div>
                         <span
