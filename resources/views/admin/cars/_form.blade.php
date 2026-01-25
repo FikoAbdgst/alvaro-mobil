@@ -1,6 +1,5 @@
 @csrf
 <div class="space-y-8">
-    <!-- Informasi Dasar -->
     <div class="bg-white rounded-lg border border-gray-200 p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +40,6 @@
         </div>
     </div>
 
-    <!-- Harga & Status -->
     <div class="bg-white rounded-lg border border-gray-200 p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +91,6 @@
         </div>
     </div>
 
-    <!-- Gambar Utama -->
     <div class="bg-white rounded-lg border border-gray-200 p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +138,6 @@
         <x-input-error class="mt-2" :messages="$errors->get('image')" />
     </div>
 
-    <!-- Galeri Foto -->
     <div class="bg-white rounded-lg border border-gray-200 p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,7 +214,6 @@
     </div>
 </div>
 
-<!-- Action Buttons -->
 <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
     <a href="{{ route('admin.cars.index') }}"
         class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
@@ -228,39 +223,79 @@
         Batal
     </a>
 
-    <x-primary-button class="inline-flex items-center px-6 py-3 text-sm font-medium">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-        {{ isset($car) ? __('Perbarui Data Mobil') : __('Simpan Mobil Baru') }}
+    <x-primary-button id="submit-btn"
+        class="inline-flex items-center px-6 py-3 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+        <span id="btn-icon">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </span>
+
+        <span id="btn-spinner" class="hidden">
+            <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                    stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+            </svg>
+        </span>
+
+        <span id="btn-text">
+            {{ isset($car) ? __('Perbarui Data Mobil') : __('Simpan Mobil Baru') }}
+        </span>
+
+        <span id="btn-loading-text" class="hidden">
+            {{ __('Menyimpan...') }}
+        </span>
     </x-primary-button>
 </div>
 
 <script>
     // Format input harga ke Rupiah
     function formatRupiah(input) {
-        // Ambil nilai input dan hapus semua karakter non-digit
         let value = input.value.replace(/\D/g, '');
-
-        // Update hidden input dengan nilai murni (tanpa format)
         document.getElementById('price').value = value;
-
-        // Format dengan separator ribuan
         let formatted = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-        // Update tampilan
         input.value = formatted;
     }
 
-    // Inisialisasi format harga saat halaman dimuat
     document.addEventListener('DOMContentLoaded', function() {
+        // Init Price
         const priceInput = document.getElementById('price');
         const priceDisplay = document.getElementById('price_display');
-
-        // Jika ada nilai dari server (edit mode), format tampilkan
         if (priceInput.value) {
             let value = priceInput.value.replace(/\D/g, '');
             priceDisplay.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        // --- TAMBAHAN: LOGIC LOADING SAAT SUBMIT ---
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn) {
+            // Cari form terdekat dari tombol submit
+            const form = submitBtn.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    // Ambil elemen-elemen di dalam tombol
+                    const btnIcon = document.getElementById('btn-icon');
+                    const btnSpinner = document.getElementById('btn-spinner');
+                    const btnText = document.getElementById('btn-text');
+                    const btnLoadingText = document.getElementById('btn-loading-text');
+
+                    // Sembunyikan icon & teks default
+                    if (btnIcon) btnIcon.classList.add('hidden');
+                    if (btnText) btnText.classList.add('hidden');
+
+                    // Tampilkan spinner & teks loading
+                    if (btnSpinner) btnSpinner.classList.remove('hidden');
+                    if (btnLoadingText) btnLoadingText.classList.remove('hidden');
+
+                    // Disable tombol agar tidak diklik 2x
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                });
+            }
         }
     });
 
