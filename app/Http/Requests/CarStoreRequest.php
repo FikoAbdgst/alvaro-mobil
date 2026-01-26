@@ -23,11 +23,11 @@ class CarStoreRequest extends FormRequest
             'is_available' => ['boolean'],
 
             // Validasi Foto Utama (Wajib saat tambah baru)
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
 
             // Validasi Foto Gallery (Opsional, tapi jika ada harus gambar)
             'images' => ['nullable', 'array'],
-            'images.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'images.*' => ['image', 'mimes:jpeg,png,jpg', 'max:5120'],
         ];
     }
 }

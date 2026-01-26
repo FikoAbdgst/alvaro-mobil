@@ -23,11 +23,11 @@ class CarUpdateRequest extends FormRequest
             'is_available' => ['boolean'],
 
             // Foto Utama (Opsional saat update, kalau tidak diisi berarti pakai yang lama)
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
 
             // Foto Gallery
             'images' => ['nullable', 'array'],
-            'images.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'images.*' => ['image', 'mimes:jpeg,png,jpg', 'max:5120'],
         ];
     }
 }
