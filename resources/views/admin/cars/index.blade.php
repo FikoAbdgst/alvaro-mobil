@@ -170,11 +170,20 @@
                                             <div class="flex gap-2">
                                                 <a href="{{ route('admin.cars.show', $car) }}"
                                                     class="text-indigo-600 hover:text-indigo-900 font-semibold">Lihat</a>
+
                                                 <span class="text-gray-300">|</span>
+
                                                 <a href="{{ route('admin.cars.edit', $car) }}"
                                                     class="text-yellow-600 hover:text-yellow-900 font-semibold">Edit</a>
 
+                                                <span class="text-gray-300">|</span>
 
+                                                {{-- TOMBOL HAPUS DITAMBAHKAN DI SINI --}}
+                                                <button type="button"
+                                                    x-on:click="openDeleteModal('{{ route('admin.cars.destroy', $car) }}', '{{ $car->brand }} {{ $car->model }}')"
+                                                    class="text-red-600 hover:text-red-900 font-semibold">
+                                                    Hapus
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
