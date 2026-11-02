@@ -10,11 +10,11 @@
     aria-label="Lihat unit {{ $title }} {{ $car->year }}, {{ $price }}">
 
     {{-- Foto rasio tetap: tidak ada pergeseran layout saat gambar dimuat --}}
-    <div class="relative aspect-[16/10] overflow-hidden bg-brand-paper">
+    <div class="relative aspect-[4/3] overflow-hidden bg-brand-paper">
         @if ($car->image)
             <img src="{{ Storage::url($car->image) }}" alt="Foto {{ $title }} {{ $car->year }}" width="800"
-                height="500" loading="{{ $eager ? 'eager' : 'lazy' }}" decoding="async"
-                class="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.035]">
+                height="600" loading="{{ $eager ? 'eager' : 'lazy' }}" decoding="async"
+                class="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.035]">
         @else
             <div class="flex h-full w-full items-center justify-center text-brand-steel">
                 <svg class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
