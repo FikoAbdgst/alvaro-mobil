@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
         ]);
 
-        $this->call(CarSeeder::class);
+        $this->call([
+            CarSeeder::class,
+            GallerySeeder::class,
+        ]);
     }
 }

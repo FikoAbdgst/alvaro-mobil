@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="@guest scrollbar-hidden @endguest">
 
 <head>
     <meta charset="utf-8">
@@ -11,7 +11,9 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.bunny.net/css?family=archivo:400,500,600,700,800,900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=ibm-plex-mono:400,500&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -67,7 +69,7 @@
 
 {{-- Tambahkan class 'preload' untuk mencegah animasi saat load --}}
 
-<body class="font-sans antialiased preload" x-data="{
+<body class="font-sans antialiased preload @guest font-body @endguest" x-data="{
     sidebarOpen: window.initialSidebarState, // Ambil dari script di head
     init() {
         // Hapus class preload setelah render selesai agar animasi kembali jalan
@@ -82,7 +84,9 @@
     }
 }">
 
-    <div class="min-h-screen bg-gray-100">
+    <a href="#main" class="skip-link">Lewati ke konten utama</a>
+
+    <div class="min-h-screen @auth bg-gray-100 @else bg-white @endauth">
 
         @auth
             @include('layouts.navigation.admin')
@@ -118,7 +122,7 @@
                 </header>
             @endisset
 
-            <main>
+            <main id="main" tabindex="-1">
                 {{ $slot }}
             </main>
         </div>

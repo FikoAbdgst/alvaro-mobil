@@ -1,297 +1,221 @@
-<x-app-layout>
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <!-- Hero Section dengan Breadcrumb -->
-        <div class="bg-indigo-600 text-white py-6 lg:py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+@php
+    $message = "Halo Admin, saya tertarik dengan mobil ini:\n\n";
+    $message .= '*Merek:* ' . $car->brand . "\n";
+    $message .= '*Model:* ' . $car->model . "\n";
+    $message .= '*Tahun:* ' . $car->year . "\n";
+    $message .= '*Harga:* Rp ' . number_format($car->price, 0, ',', '.') . "\n\n";
+    $message .= 'Apakah unit ini masih tersedia?';
+
+    $encodedMessage = urlencode($message);
+    $phoneNumber = '6287875712617';
+    $waHref = "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
+    $carTitle = trim($car->brand . ' ' . $car->model);
+    $price = 'Rp ' . number_format($car->price, 0, ',', '.');
+@endphp
+
+<x-app-layout :show-floating="false">
+    <div class="min-h-screen bg-white pb-28 lg:pb-12">
+
+        {{-- Bar navigasi kembali --}}
+        <div class="border-b border-brand-line bg-white">
+            <div class="container-shell flex min-h-[52px] items-center justify-between gap-4">
                 <a href="{{ route('home') }}"
-                    class="inline-flex items-center text-white/90 hover:text-white font-medium transition-colors group mb-4">
-                    <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    class="-ml-2 inline-flex min-h-[44px] items-center gap-2 px-2 font-mono text-[9px] font-medium uppercase tracking-[0.18em] text-brand-muted transition-colors hover:text-brand-blue-700">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.75"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m0 0l6-6m-6 6l6 6" />
                     </svg>
                     Kembali
                 </a>
+
+                <p class="hud text-brand-muted">Unit / {{ $car->year }}</p>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-            <!-- Desktop: Side by Side Layout | Mobile: Stacked -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div class="container-shell pt-6 sm:pt-8 lg:pt-10">
+            <div class="grid gap-8 lg:grid-cols-12 lg:gap-10">
 
-                <!-- Left Column: Image Gallery (Desktop: 7 cols | Mobile: Full) -->
+                {{-- Foto + bukti --}}
                 <div class="lg:col-span-7">
-                    <div class="bg-white rounded-2xl shadow-lg p-4 lg:p-6 sticky top-6">
-                        <!-- Main Image -->
-                        <div class="mb-4 rounded-xl overflow-hidden shadow-md bg-gray-100 group relative">
+                    <div class="flex items-center justify-between gap-3 pb-3">
+                        <p class="hud text-brand-blue-700">{{ $car->brand }}</p>
+                        <p class="hud text-brand-muted">ID / {{ str_pad($car->id, 4, '0', STR_PAD_LEFT) }}</p>
+                    </div>
+
+                    <div class="border border-brand-line bg-white">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-brand-paper lg:aspect-[16/11]">
                             @if ($car->image)
-                                <div class="relative aspect-[16/10] overflow-hidden">
+                                <button type="button"
+                                    class="group absolute inset-0 block h-full w-full cursor-zoom-in"
+                                    onclick="openModal('{{ Storage::url($car->image) }}')"
+                                    aria-label="Perbesar foto {{ $carTitle }} {{ $car->year }}">
                                     <img src="{{ Storage::url($car->image) }}"
-                                        alt="{{ $car->brand }} {{ $car->model }}" onclick="openModal(this.src)"
-                                        class="w-full h-full object-cover cursor-zoom-in transition-transform duration-500 ">
-                                    <div
-                                        class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors pointer-events-none">
-                                    </div>
-                                    <div
-                                        class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        alt="Foto {{ $carTitle }} {{ $car->year }}" width="1200" height="900"
+                                        fetchpriority="high" decoding="async"
+                                        class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]">
+
+                                    <span
+                                        class="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-2.5 py-2 font-mono text-[8.5px] font-medium uppercase tracking-[0.12em] text-brand-ink">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.75"
+                                            viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                                         </svg>
-                                        <span class="text-sm font-medium text-gray-700">Klik untuk zoom</span>
-                                    </div>
-                                </div>
+                                        Zoom
+                                    </span>
+                                </button>
                             @else
-                                <div class="aspect-[16/10] bg-gray-200 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-20 h-20 text-gray-400 mx-auto mb-3" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <p class="text-gray-500 font-medium">Gambar Tidak Tersedia</p>
-                                    </div>
+                                <div class="flex h-full w-full flex-col items-center justify-center gap-3 text-brand-muted">
+                                    <svg class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.25"
+                                        viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <p class="font-mono text-[9px] uppercase tracking-[0.16em]">Gambar Tidak Tersedia</p>
                                 </div>
                             @endif
+
+                            <span
+                                class="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1.5 border bg-white/95 px-2 py-1.5 font-mono text-[8.5px] font-medium uppercase leading-none tracking-[0.12em] {{ $car->is_available ? 'border-brand-blue-200 text-brand-blue-700' : 'border-brand-line text-brand-muted' }}">
+                                <span
+                                    class="h-1 w-1 {{ $car->is_available ? 'bg-brand-blue-500' : 'bg-brand-steel' }}"
+                                    aria-hidden="true"></span>
+                                {{ $car->is_available ? 'Tersedia' : 'Terjual' }}
+                            </span>
                         </div>
 
-                        <!-- Gallery Thumbnails -->
                         @if ($car->images->count() > 0)
-                            <div class="mb-4">
-                                <div class="flex items-center justify-between mb-3">
-                                    <h3 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        Galeri Foto ({{ $car->images->count() }})
-                                    </h3>
+                            <div class="border-t border-brand-line p-3 sm:p-4">
+                                <div class="flex items-center justify-between gap-3">
+                                    <h2 class="hud text-brand-muted">
+                                        Galeri Foto / {{ $car->images->count() }}
+                                    </h2>
+
                                     @if ($car->images->count() > 6)
-                                        <button onclick="toggleGallery()" id="toggleBtn"
-                                            class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">
+                                        <button type="button" onclick="toggleGallery()" id="toggleBtn"
+                                            class="inline-flex min-h-[44px] items-center gap-1 px-2 font-mono text-[8.5px] font-medium uppercase tracking-[0.12em] text-brand-blue-700 transition-colors hover:text-brand-blue-800">
                                             <span id="toggleText">Lihat Semua</span>
-                                            <svg id="toggleIcon" class="w-4 h-4 transition-transform" fill="none"
-                                                stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 9l-7 7-7-7" />
+                                            <svg id="toggleIcon" class="h-3.5 w-3.5 transition-transform"
+                                                fill="none" stroke="currentColor" stroke-width="1.75"
+                                                viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
                                     @endif
                                 </div>
 
-                                <div id="galleryGrid" class="grid grid-cols-4 lg:grid-cols-6 gap-2 lg:gap-3">
+                                <div id="galleryGrid" class="mt-3 grid grid-cols-4 gap-2 lg:grid-cols-6">
                                     @foreach ($car->images as $index => $photo)
-                                        <div class="aspect-square rounded-lg overflow-hidden shadow-sm border-2 border-gray-200 hover:border-indigo-400 bg-white gallery-item transition-all {{ $index >= 6 ? 'hidden' : '' }}"
-                                            data-index="{{ $index }}">
-                                            <img src="{{ Storage::url($photo->image_path) }}" alt="Galeri Mobil"
-                                                onclick="openModal(this.src)"
-                                                class="w-full h-full object-cover cursor-pointer hover:opacity-75 transition-opacity">
-                                        </div>
+                                        <button type="button"
+                                            class="gallery-item aspect-square overflow-hidden border border-brand-line bg-white transition-colors hover:border-brand-blue-500 {{ $index >= 6 ? 'hidden' : '' }}"
+                                            data-index="{{ $index }}"
+                                            onclick="openModal('{{ Storage::url($photo->image_path) }}')"
+                                            aria-label="Perbesar foto {{ $carTitle }} nomor {{ $index + 1 }}">
+                                            <img src="{{ Storage::url($photo->image_path) }}"
+                                                alt="Galeri {{ $carTitle }} {{ $index + 1 }}" width="200"
+                                                height="200" loading="lazy" decoding="async"
+                                                class="h-full w-full object-cover">
+                                        </button>
                                     @endforeach
                                 </div>
                             </div>
                         @endif
+                    </div>
 
-                        <!-- Trust Badges (Desktop Only) -->
-                        <div class="hidden lg:grid grid-cols-3 gap-3 pt-4 border-t border-gray-200">
+                    {{-- Bukti kualitas --}}
+                    <div class="mt-4 grid grid-cols-3 border-y border-brand-line">
+                        @foreach ([
+            ['label' => 'Kondisi Prima', 'icon' => 'M4 15l1.5-5A2 2 0 017.4 8.5h9.2a2 2 0 011.9 1.5L20 15M4 15h16v3a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H7v1a1 1 0 01-1 1H5a1 1 0 01-1-1v-3z'],
+            ['label' => 'Surat Lengkap', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+            ['label' => 'Terawat Rutin', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'],
+        ] as $proof)
                             <div
-                                class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-center transform hover:scale-105 transition-transform">
-                                <div class="text-3xl mb-2">🚗</div>
-                                <p class="text-xs font-semibold text-gray-700">Kondisi Prima</p>
+                                class="flex flex-col items-center gap-2 border-r border-brand-line px-2 py-3.5 text-center last:border-r-0 sm:flex-row sm:justify-center sm:gap-2.5 sm:py-4">
+                                <svg class="h-4 w-4 shrink-0 text-brand-blue-700" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="{{ $proof['icon'] }}" />
+                                </svg>
+                                <p class="font-mono text-[8.5px] uppercase leading-tight tracking-[0.08em] text-brand-muted">
+                                    {{ $proof['label'] }}
+                                </p>
                             </div>
-                            <div
-                                class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 text-center transform hover:scale-105 transition-transform">
-                                <div class="text-3xl mb-2">✅</div>
-                                <p class="text-xs font-semibold text-gray-700">Surat Lengkap</p>
-                            </div>
-                            <div
-                                class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-center transform hover:scale-105 transition-transform">
-                                <div class="text-3xl mb-2">🔧</div>
-                                <p class="text-xs font-semibold text-gray-700">Terawat Rutin</p>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
-                <!-- Right Column: Details (Desktop: 5 cols | Mobile: Full) -->
+                {{-- Detail unit --}}
                 <div class="lg:col-span-5">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 lg:p-8 space-y-6">
+                    <div class="lg:sticky lg:top-[92px]">
+                        <p class="hud text-brand-blue-700">{{ $car->brand }}</p>
+                        <h1
+                            class="mt-2 font-display text-[clamp(2.25rem,8.5vw,3.25rem)] font-black leading-[0.95] tracking-[-0.045em] text-brand-ink">
+                            {{ $car->model }}
+                        </h1>
 
-                        <!-- Title & Status -->
-                        <div>
-                            <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="mt-3 flex items-center gap-2.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand-muted">
+                            <span class="tabular-nums">{{ $car->year }}</span>
+                            <span class="h-1 w-1 bg-brand-blue-500" aria-hidden="true"></span>
+                            <span class="capitalize">{{ $car->color }}</span>
+                        </div>
+
+                        <div class="mt-6 border-t border-brand-line pt-5">
+                            <div class="flex items-end justify-between gap-3">
                                 <div>
-                                    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-2">
-                                        {{ $car->brand }}
-                                    </h1>
-                                    <p class="text-2xl lg:text-3xl font-bold text-indigo-600">
-                                        {{ $car->model }}
+                                    <p class="hud text-brand-muted">Harga</p>
+                                    <p
+                                        class="mt-2 text-[clamp(1.9rem,7.5vw,2.6rem)] font-black tabular-nums leading-none tracking-[-0.045em] text-brand-ink">
+                                        {{ $price }}
                                     </p>
                                 </div>
-                                <span
-                                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-md whitespace-nowrap {{ $car->is_available ? 'bg-emerald-500 text-white' : 'bg-gray-300 text-gray-700' }}">
-                                    <span
-                                        class="w-2 h-2 rounded-full mr-2 {{ $car->is_available ? 'bg-white animate-pulse' : 'bg-gray-600' }}"></span>
-                                    {{ $car->is_available ? 'Tersedia' : 'Terjual' }}
-                                </span>
-                            </div>
-
-                            <!-- Price Badge -->
-                            <div class="bg-green-600 rounded-2xl p-6 shadow-xl">
-                                <p class="text-sm font-medium text-white/90 mb-1">Harga</p>
-                                <p class="text-4xl lg:text-5xl font-black text-white">
-                                    {{ 'Rp ' . number_format($car->price, 0, ',', '.') }}
-                                </p>
+                                <p class="hud pb-1 text-brand-muted">OTR</p>
                             </div>
                         </div>
 
-                        <!-- Specifications Card -->
-                        <div
-                            class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100">
-                            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                                <div class="bg-indigo-600 rounded-lg p-2 mr-3">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                    </svg>
-                                </div>
-                                Spesifikasi Kendaraan
-                            </h2>
-
-                            <div class="space-y-3">
-                                <div
-                                    class="flex items-center justify-between py-3 px-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                                    <span class="flex items-center text-gray-600 font-medium text-sm">
-                                        <svg class="w-5 h-5 mr-3 text-indigo-500" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                        </svg>
-                                        Merek
-                                    </span>
-                                    <span class="text-gray-900 font-bold">{{ $car->brand }}</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between py-3 px-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                                    <span class="flex items-center text-gray-600 font-medium text-sm">
-                                        <svg class="w-5 h-5 mr-3 text-indigo-500" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        Model
-                                    </span>
-                                    <span class="text-gray-900 font-bold">{{ $car->model }}</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between py-3 px-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                                    <span class="flex items-center text-gray-600 font-medium text-sm">
-                                        <svg class="w-5 h-5 mr-3 text-indigo-500" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        Tahun
-                                    </span>
-                                    <span class="text-gray-900 font-bold">{{ $car->year }}</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between py-3 px-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                                    <span class="flex items-center text-gray-600 font-medium text-sm">
-                                        <svg class="w-5 h-5 mr-3 text-indigo-500" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                                        </svg>
-                                        Warna
-                                    </span>
-                                    <span class="text-gray-900 font-bold">{{ $car->color }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
-                                <div class="bg-purple-600 rounded-lg p-2 mr-3">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 6h16M4 12h16M4 18h7" />
-                                    </svg>
-                                </div>
-                                Deskripsi
-                            </h2>
-                            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                                <p class="text-gray-700 whitespace-pre-line leading-relaxed text-sm">
-                                    {{ $car->description ?? 'Tidak ada deskripsi tambahan. Hubungi kami untuk informasi lebih lanjut mengenai mobil ini.' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- CTA Button -->
-                        @php
-                            $message = "Halo Admin, saya tertarik dengan mobil ini:\n\n";
-                            $message .= '*Merek:* ' . $car->brand . "\n";
-                            $message .= '*Model:* ' . $car->model . "\n";
-                            $message .= '*Tahun:* ' . $car->year . "\n";
-                            $message .= '*Harga:* Rp ' . number_format($car->price, 0, ',', '.') . "\n\n";
-                            $message .= 'Apakah unit ini masih tersedia?';
-
-                            $encodedMessage = urlencode($message);
-                            $phoneNumber = '6287875712617';
-                        @endphp
-
-                        <div class="pt-4">
-                            <a href="https://wa.me/{{ $phoneNumber }}?text={{ $encodedMessage }}" target="_blank"
-                                class="flex items-center justify-center w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition-all group">
-                                <svg class="w-6 h-6 mr-3  transition-transform" fill="currentColor"
-                                    viewBox="0 0 24 24">
+                        {{-- CTA desktop --}}
+                        <div class="mt-6 hidden lg:block">
+                            <a href="{{ $waHref }}" target="_blank" rel="noopener noreferrer"
+                                class="btn btn-blue w-full !min-h-[52px] text-[13px]">
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                                 </svg>
-                                <span class="text-lg">Hubungi via WhatsApp</span>
+                                Hubungi via WhatsApp
                             </a>
-                            <p class="text-center text-xs text-gray-500 mt-3">
-                                💬 Respon cepat dari admin kami
+                            <p class="mt-3 text-center font-mono text-[8.5px] uppercase tracking-[0.12em] text-brand-muted">
+                                Respon cepat dari admin kami
                             </p>
                         </div>
 
-                        <!-- Trust Badges Mobile -->
-                        <div class="lg:hidden grid grid-cols-3 gap-3 pt-4 border-t border-gray-200">
-                            <div class="flex flex-col items-center">
-                                <div class="bg-blue-100 rounded-full p-3 mb-2">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
+                        {{-- Spesifikasi --}}
+                        <div class="mt-7">
+                            <h2 class="hud text-brand-muted">Spesifikasi Kendaraan</h2>
+                            <dl class="mt-3 grid grid-cols-2 border-l border-t border-brand-line">
+                                <div class="border-b border-r border-brand-line p-3.5">
+                                    <dt class="hud text-brand-muted">Merek</dt>
+                                    <dd class="mt-1.5 text-sm font-semibold text-brand-ink">{{ $car->brand }}</dd>
                                 </div>
-                                <p class="text-xs font-semibold text-gray-700">Terpercaya</p>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <div class="bg-green-100 rounded-full p-3 mb-2">
-                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
+                                <div class="border-b border-r border-brand-line p-3.5">
+                                    <dt class="hud text-brand-muted">Model</dt>
+                                    <dd class="mt-1.5 text-sm font-semibold text-brand-ink">{{ $car->model }}</dd>
                                 </div>
-                                <p class="text-xs font-semibold text-gray-700">Berkualitas</p>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <div class="bg-purple-100 rounded-full p-3 mb-2">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                <div class="border-b border-r border-brand-line p-3.5">
+                                    <dt class="hud text-brand-muted">Tahun</dt>
+                                    <dd class="mt-1.5 text-sm font-semibold tabular-nums text-brand-ink">{{ $car->year }}</dd>
                                 </div>
-                                <p class="text-xs font-semibold text-gray-700">Fast Respon</p>
-                            </div>
+                                <div class="border-b border-r border-brand-line p-3.5">
+                                    <dt class="hud text-brand-muted">Warna</dt>
+                                    <dd class="mt-1.5 text-sm font-semibold capitalize text-brand-ink">{{ $car->color }}</dd>
+                                </div>
+                            </dl>
+                        </div>
+
+                        {{-- Deskripsi --}}
+                        <div class="mt-7">
+                            <h2 class="hud text-brand-muted">Deskripsi</h2>
+                            <p class="mt-3 whitespace-pre-line text-[13.5px] leading-relaxed text-brand-muted">
+                                {{ $car->description ?? 'Tidak ada deskripsi tambahan. Hubungi kami untuk informasi lebih lanjut mengenai mobil ini.' }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -299,31 +223,55 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
-    <div id="imageModal"
-        class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0"
-        onclick="closeModal()">
+    {{-- Bar aksi tetap di HP: harga + WhatsApp selalu terjangkau --}}
+    <div class="fixed inset-x-0 bottom-0 z-40 bg-brand-ink text-white lg:hidden"
+        style="padding-bottom: env(safe-area-inset-bottom)">
+        <div class="h-[2px] w-full bg-brand-blue-500" aria-hidden="true"></div>
+        <div class="flex items-center gap-3 px-4 py-3">
+            <div class="min-w-0">
+                <p class="hud text-white/45">Harga</p>
+                <p class="mt-1 truncate text-[15px] font-black tabular-nums leading-none tracking-[-0.02em] text-white">
+                    {{ $price }}
+                </p>
+            </div>
 
-        <button
-            class="absolute top-4 right-4 sm:top-8 sm:right-8 text-white bg-white/10 hover:bg-white/20 rounded-full p-3 sm:p-4 backdrop-blur-md transition-all hover:rotate-90 focus:outline-none group z-10"
-            onclick="closeModal()">
-            <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <a href="{{ $waHref }}" target="_blank" rel="noopener noreferrer"
+                class="btn btn-blue ml-auto flex-1 !min-h-[48px] !max-w-[220px] !px-3 text-[10px] sm:text-[11px]">
+                <svg class="h-[18px] w-[18px] shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                WhatsApp
+            </a>
+        </div>
+    </div>
+
+    {{-- Pratinjau foto --}}
+    <div id="imageModal" role="dialog" aria-modal="true" aria-label="Pratinjau foto"
+        class="fixed inset-0 z-50 hidden bg-brand-ink/95 opacity-0 transition-opacity duration-300"
+        onclick="closeModal()">
+        <button type="button"
+            class="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-white transition-colors hover:bg-white hover:text-brand-ink sm:right-8 sm:top-8"
+            onclick="event.stopPropagation(); closeModal()" aria-label="Tutup pratinjau">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
 
-        <div
-            class="absolute top-4 left-4 sm:top-8 sm:left-8 text-white bg-white/10 backdrop-blur-md rounded-full px-4 py-2 text-sm font-medium">
-            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        <p
+            class="absolute left-4 top-4 z-10 hidden items-center gap-2 border border-white/15 px-3 py-2 font-mono text-[8.5px] uppercase tracking-[0.14em] text-white/70 sm:left-8 sm:top-8 sm:inline-flex">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.75"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
             </svg>
             Klik untuk menutup
-        </div>
+        </p>
 
-        <div class="relative max-w-7xl max-h-screen p-4 sm:p-8" onclick="event.stopPropagation()">
-            <img id="modalImage" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl ring-4 ring-white/20"
-                src="" alt="Preview">
+        <div class="flex h-full w-full items-center justify-center p-4 sm:p-8" onclick="event.stopPropagation()">
+            <img id="modalImage" class="max-h-[85vh] max-w-full border border-white/15 shadow-2xl"
+                src="" alt="Pratinjau foto mobil">
         </div>
     </div>
 
@@ -332,6 +280,7 @@
         const modalImg = document.getElementById('modalImage');
 
         function openModal(src) {
+            if (!modal || !modalImg) return;
             modalImg.src = src;
             modal.classList.remove('hidden');
             setTimeout(() => {
@@ -341,6 +290,7 @@
         }
 
         function closeModal() {
+            if (!modal || !modalImg) return;
             modal.classList.add('opacity-0');
             setTimeout(() => {
                 modal.classList.add('hidden');
@@ -350,12 +300,11 @@
         }
 
         document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
+            if (event.key === 'Escape') {
                 closeModal();
             }
         });
 
-        // Toggle gallery function
         let isExpanded = false;
 
         function toggleGallery() {
@@ -384,23 +333,4 @@
             }
         }
     </script>
-
-    <style>
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            .max-w-7xl,
-            .max-w-7xl * {
-                visibility: visible;
-            }
-
-            .max-w-7xl {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-        }
-    </style>
 </x-app-layout>
