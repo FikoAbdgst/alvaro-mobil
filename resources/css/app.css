@@ -223,21 +223,28 @@
     }
 
     .brand-marquee {
+        --brand-marquee-gap: clamp(2rem, 6vw, 5.5rem);
+        --brand-marquee-duration: 90s;
         overflow: hidden;
+        -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+        mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
     }
 
     .brand-marquee-track {
+        --marquee-shift: -25%;
         display: flex;
         width: max-content;
-        animation: marquee 55s linear infinite;
+        animation: marquee var(--brand-marquee-duration) linear infinite;
+        will-change: transform;
     }
 
+    /* Padding kanan sama dengan gap supaya sambungan antar-grup tidak berjarak ganda. */
     .brand-marquee-group {
         display: flex;
         flex-shrink: 0;
         align-items: center;
-        gap: clamp(2rem, 6vw, 5.5rem);
-        padding: 0 clamp(1rem, 3vw, 2.5rem);
+        gap: var(--brand-marquee-gap);
+        padding-right: var(--brand-marquee-gap);
     }
 
     .brand-marquee-item {
@@ -408,6 +415,8 @@
 
         .brand-marquee {
             overflow-x: auto;
+            -webkit-mask-image: none;
+            mask-image: none;
         }
 
         .brand-marquee-track {
@@ -471,6 +480,12 @@
     .group:focus-visible .corner-mark::before,
     .group:focus-visible .corner-mark::after {
         opacity: 1;
+    }
+
+    @keyframes marquee {
+        to {
+            transform: translateX(var(--marquee-shift, -50%));
+        }
     }
 
     @keyframes testimonial-marquee {

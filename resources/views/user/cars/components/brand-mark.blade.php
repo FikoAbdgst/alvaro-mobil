@@ -17,8 +17,8 @@
     [$logoWidth, $logoHeight] = $logos[$slug] ?? [24, 24];
     $isWordmark = in_array($slug, ['daihatsu', 'datsun'], true);
     $logoClass = $isWordmark
-        ? 'block h-auto w-full max-h-7 max-w-full object-contain sm:w-auto sm:max-w-[104px]'
-        : 'block h-7 w-7 object-contain';
+        ? 'block h-4 w-auto max-w-[84px] object-contain object-left sm:h-5 sm:max-w-[104px]'
+        : 'block h-6 w-6 object-contain sm:h-7 sm:w-7';
 @endphp
 
 @if ($hasLogo)

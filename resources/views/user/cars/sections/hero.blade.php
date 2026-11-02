@@ -119,8 +119,8 @@
     <div class="relative z-10 border-t border-brand-line bg-white">
         <div class="brand-marquee py-4 sm:py-5" role="list" aria-label="Merek mobil yang tersedia">
             <div class="brand-marquee-track">
-                @foreach (range(0, 1) as $copy)
-                    <div class="brand-marquee-group" @if ($copy === 1) aria-hidden="true" @endif>
+                @foreach (range(0, 3) as $copy)
+                    <div class="brand-marquee-group" @if ($copy > 0) aria-hidden="true" @endif>
                         @foreach ($brands as $brand)
                             <span class="brand-marquee-item" role="listitem">
                                 <x-brand-mark :name="$brand" />

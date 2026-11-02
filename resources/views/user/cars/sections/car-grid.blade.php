@@ -2,22 +2,23 @@
 <section id="koleksi" class="section-pad scroll-mt-20 border-b border-brand-line bg-brand-paper lg:scroll-mt-24">
     <div data-reveal class="container-shell">
 
-        <div class="flex items-end justify-between gap-4 border-b border-brand-line pb-5">
-            <div>
+        <div class="border-b border-brand-line pb-5">
+            <div class="flex items-end justify-between gap-4">
                 <h2
                     class="font-display text-[clamp(2rem,8vw,3.25rem)] font-black leading-[0.94] tracking-[-0.045em] text-brand-ink">
                     Koleksi Terbaru
                 </h2>
-                <p class="mt-2.5 max-w-[42ch] text-[13.5px] leading-relaxed text-brand-muted sm:text-[15px]">
-                    Pilih dari berbagai pilihan mobil berkualitas tinggi dengan harga terbaik
+
+                <p class="hud shrink-0 pb-1 text-right text-brand-muted">
+                    <span class="block text-[13px] tracking-[0.06em] text-brand-ink tabular-nums sm:text-[15px]">
+                        {{ str_pad($cars->count(), 2, '0', STR_PAD_LEFT) }}
+                    </span>
+                    Unit
                 </p>
             </div>
 
-            <p class="hud shrink-0 pb-1 text-right text-brand-muted">
-                <span class="block text-[13px] tracking-[0.06em] text-brand-ink tabular-nums sm:text-[15px]">
-                    {{ str_pad($cars->count(), 2, '0', STR_PAD_LEFT) }}
-                </span>
-                Unit
+            <p class="mt-2.5 max-w-[42ch] text-[13.5px] leading-relaxed text-brand-muted sm:text-[15px]">
+                Pilih dari berbagai pilihan mobil berkualitas tinggi dengan harga terbaik
             </p>
         </div>
 
@@ -41,9 +42,11 @@
             </div>
         @else
             {{-- Rel snap di HP; grid mulai sm --}}
-            <div class="no-scrollbar -mx-5 mt-6 flex gap-4 overflow-visible px-5 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:mt-8 lg:grid-cols-3 lg:gap-6">
+            <div
+                class="no-scrollbar -mx-5 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-pl-5 px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:mt-8 lg:grid-cols-3 lg:gap-6">
                 @foreach ($cars as $car)
-                    <div class="w-full max-w-[360px] shrink-0 snap-start sm:w-auto sm:max-w-none">
+                    <div
+                        class="w-[calc(100%-2.5rem)] max-w-[340px] shrink-0 snap-start sm:w-auto sm:max-w-none">
                         <x-car-card :car="$car" :eager="$loop->first" />
                     </div>
                 @endforeach
